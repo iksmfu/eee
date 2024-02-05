@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Bot Shop</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to right, #3498db, #e74c3c);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 80%;
+      max-width: 600px;
+    }
+
+    h1 {
+      color: #fff;
+      text-align: center;
+    }
+
+    .bot-card {
+      margin: 20px 0;
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+      background-color: #fff;
+      color: #2c3e50;
+    }
+
+    .bot-card:hover {
+      transform: scale(1.05);
+    }
+
+    .bot-image {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .bot-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .bot-description {
+      color: #555;
+    }
+
+    .bot-price {
+      color: #27ae60;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .add-to-cart {
+      background-color: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .add-to-cart:hover {
+      background-color: #c0392b;
+    }
+
+    .cart {
+      margin-top: 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .cart-items {
+      font-weight: bold;
+      color: #e74c3c;
+    }
+
+    .confirm-order-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .confirm-order-box {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .confirm-order-button {
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-top: 10px;
+      transition: background-color 0.3s ease-in-out;
+    }
+
+    .confirm-order-button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Discord Bot Shop</h1>
+
+  <div class="bot-card" id="bot1">
+    <a href="bot1_link.html">
+      <img class="bot-image" src="https://cdn.discordapp.com/attachments/1203366804651638804/1204000307479052338/hEvan_gen.png?ex=65d323aa&is=65c0aeaa&hm=c0953e24c1bb51ac73dc59c563c2c0393341521b8ed960bd2fc60a3a3f469d93" alt="Bot 1">
+    </a>
+    <div class="bot-name">Source Code of Heaven Gen</div>
+    <div class="bot-description">An amazing Discord bot with cool features.</div>
+    <div class="bot-price">$25</div>
+    <button class="add-to-cart" onclick="addToCart('Source Code of Heaven Gen', 25)">Add to Cart</button>
+  </div>
+
+  <div class="bot-card" id="bot2">
+    <a href="bot2_link.html">
+      <img class="bot-image" src="https://cdn.discordapp.com/attachments/1203366804651638804/1204000307479052338/hEvan_gen.png?ex=65d323aa&is=65c0aeaa&hm=c0953e24c1bb51ac73dc59c563c2c0393341521b8ed960bd2fc60a3a3f469d93" alt="Bot 2">
+    </a>
+    <div class="bot-name">Copy Of Heaven Gen</div>
+    <div class="bot-description">A powerful bot for your server.</div>
+    <div class="bot-price">$15.99</div>
+    <button class="add-to-cart" onclick="addToCart('Copy Of Heaven Gen', 15.99)">Add to Cart</button>
+  </div>
+
+  <div class="cart">
+    <p>Cart: <span id="cartItems">0</span> items</p>
+    <button class="confirm-order-button" onclick="showConfirmOrderModal()">Confirm Order</button>
+  </div>
+
+</div>
+
+<div class="confirm-order-modal" id="confirmOrderModal">
+  <div class="confirm-order-box">
+    <p>Are you sure you want to confirm your order?</p>
+    <p>Items in Cart: <span id="itemsInCart">0</span></p>
+    <button class="confirm-order-button" onclick="confirmOrder()">Yes, Confirm</button>
+    <button class="confirm-order-button" onclick="hideConfirmOrderModal()">Cancel</button>
+  </div>
+</div>
+
+<script>
+  let cartItemCount = 0;
+
+  function addToCart(botName, botPrice) {
+    cartItemCount++;
+    document.getElementById('cartItems').innerText = cartItemCount;
+    document.getElementById('itemsInCart').innerText = cartItemCount;
+    showConfirmOrderModal();
+  }
+
+  function showConfirmOrderModal() {
+    document.getElementById('confirmOrderModal').style.display = 'flex';
+  }
+
+  function hideConfirmOrderModal() {
+    document.getElementById('confirmOrderModal').style.display = 'none';
+  }
+
+  function confirmOrder() {
+    hideConfirmOrderModal();
+    redirectToDiscord();
+  }
+
+  function redirectToDiscord() {
+    window.location.href = 'https://discord.gg/Sbp4pEjpWq';
+  }
+</script>
+
+</body>
+</html>
